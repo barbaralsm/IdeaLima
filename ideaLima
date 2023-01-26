@@ -1,0 +1,143 @@
+DROP DATABASE IF EXISTS `tablas`;
+CREATE DATABASE IF NOT EXISTS `tablas`;
+USE `tablas`;
+
+DROP TABLE IF EXISTS `socios`;
+CREATE TABLE IF NOT EXISTS `socios` (
+  id_socio INT NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY,
+  dni_socio VARCHAR(8) NOT NULL,
+  nombre VARCHAR(50) NOT NULL,
+  apellido VARCHAR(50) NOT NULL,
+  genero CHAR(1),
+  fecha_nacimiento DATE,
+  telefono VARCHAR(15),
+  correo VARCHAR(50),
+  direccion VARCHAR(100) NOT NULL,
+  fecha_alta date,
+ID_Sucursal_contrato varchar (15) not null,
+Sucursal_contrato varchar (15) not null,
+ID_contrato varchar (15) not null,
+foreign key  (ID_contrato)
+references ID_contrato (contrato)
+);
+
+
+DROP TABLE IF EXISTS `prospect`;
+CREATE TABLE IF NOT EXISTS `prospect` (
+  id_socio INT NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY,
+  dni_socio VARCHAR(8) ,
+  nombre VARCHAR(50) NOT NULL,
+  apellido VARCHAR(50) NOT NULL,
+  genero CHAR(1),
+  fecha_nacimiento DATE,
+  telefono VARCHAR(15) not null,
+  correo VARCHAR(50) not null,
+  direccion VARCHAR(100) ,
+  observaciones varchar (500),
+  usuario VARCHAR (15), 
+  foreign key (usuario)
+  references usuario (vendedores)
+);
+
+DROP TABLE IF EXISTS `membresias`;
+CREATE TABLE IF NOT EXISTS `membresias` (
+nro_factura VARCHAR(20) NOT NULL UNIQUE PRIMARY KEY,
+fecha_compra date,
+id_socio varchar(15) NOT NULL UNIQUE AUTO_INCREMENT,
+vigencia_desde date,
+vigencia_hasta date, 
+usuario VARCHAR (15) not null unique,
+FOREIGN KEY (usuario)
+REFERENCES usuario (vendedores),
+nombre_sucursal varchar (15),
+id_sucursal int,
+FOREIGN KEY (id_sucursal)
+REFERENCES id_sucursal(sucursal),
+Importe DECIMAL(11, 2)
+);
+
+DROP TABLE IF EXISTS `contratos`;
+CREATE TABLE IF NOT EXISTS `contratos` (
+id_contrato varchar(20) NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY,
+id_sucursal varchar(10) not null, 
+FOREIGN KEY (id_sucursal)
+REFERENCES id_sucursal(sucursal),
+id_lista_de_precio varchar (20),
+foreign key (id_lista_de_precio)
+REFERENCES id_lista_de_precio  (lista_de_precio),
+ forma_de_pago  VARCHAR(20),
+fecha_inicio_contrato date,
+fecha_fin_contrato date,
+  usuario varchar(15),
+  FOREIGN KEY (usuario)
+REFERENCES usuario(vendedores)
+    );
+    
+
+DROP TABLE IF EXISTS `producto`;
+CREATE TABLE IF NOT EXISTS `producto` (
+id_producto VARCHAR(10) NOT NULL UNIQUE PRIMARY KEY,   
+ descripcion_producto VARCHAR(50) NOT NULL,
+categoria INT NOT NULL,
+condicion_debito text,
+id_lista_de_precio varchar (15),
+ FOREIGN KEY (id_lista_de_precio)
+REFERENCES id_lista_de_precio(lista_de_precio),
+importe_de_venta decimal (6,2),
+PMP int (2)
+);
+
+DROP TABLE IF EXISTS `precio_por_prducto`;
+CREATE TABLE IF NOT EXISTS `precio_por_prducto` (
+producto varchar (50),
+id_producto varchar (15) not null unique primary key,
+importe_de_venta decimal (6,2),
+vigencia_desde date
+);
+  
+DROP TABLE IF EXISTS `lista_de_precio`;
+CREATE TABLE IF NOT EXISTS `lista_de_precio` (
+id_lista_de_precio int not null unique primary key,
+descripcion varchar (50),
+id_producto varchar (15),
+ FOREIGN KEY (id_producto)
+ references  id_producto (producto),
+importe decimal (6,2)
+);
+
+ 
+ DROP TABLE IF EXISTS `promociones`;
+CREATE TABLE IF NOT EXISTS `promociones` (
+id_promocion varchar (30) not null unique primary key,
+nombre_promocion  text,
+descripcion varchar (50),
+vigencia_desde date,
+vigencia_hasta date
+);
+
+
+DROP TABLE IF EXISTS `vendedores`;
+CREATE TABLE IF NOT EXISTS `vendedores` (
+usuario  VARCHAR (15) not null unique primary key,
+nombre text,
+apellido text,
+legajo int (15),
+fecha_ingreso date
+);
+
+
+
+DROP TABLE IF EXISTS `objetivos_vendedor`;
+CREATE TABLE IF NOT EXISTS `objetivos_vendedor` (
+nombre_sucursal  varchar (30),
+mes date,
+objetivo_usuario decimal (6,2),
+usuario VARCHAR (15) not null unique,
+FOREIGN KEY  (usuario)
+references  usuario (vendedor),
+nombre_vendedor text,
+apellido_vendedor text
+);
+
+
+
